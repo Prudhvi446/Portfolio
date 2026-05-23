@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prudhvi Kuchipudi — Portfolio</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg: #ffffff;
+      --bg2: #f9f9f9;
+      --bg3: #f0f0f0;
+      --text: #1a1a1a;
+      --text2: #595959;
+      --text3: #999999;
+      --border: #e6e6e6;
+      --border2: #cccccc;
+      --accent: #1a1a1a;
+      --card: #ffffff;
+      --tag-bg: #f2f2f2;
+      --tag-text: #4a4a4a;
+    }
+    [data-theme="dark"] {
+      --bg: #111110;
+      --bg2: #1a1917;
+      --bg3: #242320;
+      --text: #ffffff;
+      --text2: #e0e0e0;
+      --text3: #b0b0b0;
+      --border: #3a3835;
+      --border2: #4a4845;
+      --accent: #ffffff;
+      --card: #1a1917;
+      --tag-bg: #2a2926;
+      --tag-text: #e0e0e0;
+    }
+ 
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      font-family: 'Inter', 'Inter Tight', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 19px;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+      line-height: 1.6;
+    }
+ 
+    #root { min-height: 100vh; }
+ 
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+    .nav-links a {
+      font-size: 13px; color: var(--text2); text-decoration: none;
+      padding: 6px 12px; border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--bg2); }
+    .theme-btn {
+      background: none; border: 1px solid var(--border); border-radius: 6px;
+      cursor: pointer; color: var(--text2); padding: 6px 10px;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; font-family: 'DM Mono', monospace;
+      transition: all 0.2s; margin-left: 0.5rem;
+    }
+    .theme-btn:hover { color: var(--text); border-color: var(--border2); background: var(--bg2); }
+    .nav-mobile-menu { display: none; background: none; border: none; cursor: pointer; color: var(--text2); padding: 8px; }
+ 
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 5% 5rem;
+    }
+    .hero-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; letter-spacing: 0.12em;
+      color: var(--text3); text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 1.0;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+    .hero-name em { font-style: italic; color: var(--text2); }
+    .hero-sub {
+      font-size: 1rem; color: var(--text2); max-width: 480px;
+      line-height: 1.7; margin-bottom: 2.5rem;
+    }
+    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+    .btn-primary {
+      background: var(--text); color: var(--bg);
+      border: 1px solid var(--text);
+      padding: 10px 22px; border-radius: 6px;
+      font-size: 13px; font-family: inherit;
+      font-weight: 500; cursor: pointer; text-decoration: none;
+      transition: opacity 0.2s;
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn-primary:hover { opacity: 0.8; }
+    .btn-outline {
+      background: none; color: var(--text);
+      border: 1px solid var(--border2);
+      padding: 10px 22px; border-radius: 6px;
+      font-size: 13px; font-family: inherit;
+      font-weight: 500; cursor: pointer; text-decoration: none;
+      transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn-outline:hover { border-color: var(--text); background: var(--bg2); }
+    .hero-scroll {
+      position: absolute; bottom: 2rem; right: 2.5rem;
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      color: var(--text3); letter-spacing: 0.06em;
+      writing-mode: vertical-rl; text-orientation: mixed;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-scroll::after {
+      content: ''; display: block; width: 1px; height: 40px;
+      background: var(--border2);
+    }
+ 
+    /* SECTIONS */
+    .section {
+      padding: 5rem 5%;
+      border-top: 1px solid var(--border);
+    }
+    .section-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 3.5rem; gap: 1rem;
+    }
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; letter-spacing: 0.12em; color: var(--text3);
+      text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      line-height: 1.1; color: var(--text);
+    }
+ 
+    /* ABOUT / RESUME STRIP */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    .about-text { font-size: 15px; color: var(--text2); line-height: 1.8; }
+    .about-text p + p { margin-top: 1rem; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .stat-card {
+      background: var(--card); padding: 1.5rem;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; color: var(--text); line-height: 1;
+    }
+    .stat-label { font-size: 12px; color: var(--text3); }
+ 
+    /* RESUME BANNER */
+    .resume-banner {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg3); border: 1px solid var(--border2);
+      border-radius: 10px; padding: 1.25rem 1.75rem; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .resume-banner-text { font-size: 14px; color: var(--text2); }
+    .resume-banner-text strong { color: var(--text); font-weight: 600; }
+ 
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .skill-group { background: var(--card); padding: 1.5rem; border: 1px solid var(--border); border-radius: 10px; }
+    .skill-group-title { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 1rem; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      background: var(--tag-bg); color: var(--tag-text);
+      font-size: 12px; padding: 4px 10px; border-radius: 4px;
+      font-family: 'DM Mono', monospace; letter-spacing: 0.02em;
+    }
+ 
+    /* PROJECTS */
+    .projects-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .project-card {
+      background: var(--card); padding: 2rem;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 1rem; align-items: start;
+      transition: background 0.2s;
+    }
+    .project-card:hover { background: var(--bg2); }
+    .project-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); margin-bottom: 0.5rem; }
+    .project-name { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--text); margin-bottom: 0.5rem; }
+    .project-desc { font-size: 13.5px; color: var(--text2); line-height: 1.7; margin-bottom: 1rem; }
+    .project-highlights { list-style: none; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 4px; }
+    .project-highlights li { font-size: 12.5px; color: var(--text2); padding-left: 1rem; position: relative; }
+    .project-highlights li::before { content: '—'; position: absolute; left: 0; color: var(--text3); }
+    .project-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 0.5rem; }
+    .link-btn {
+      font-size: 12px; font-family: 'DM Mono', monospace;
+      color: var(--text2); text-decoration: none;
+      border: 1px solid var(--border); padding: 6px 12px; border-radius: 5px;
+      white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 5px;
+    }
+    .link-btn:hover { color: var(--text); border-color: var(--border2); }
+ 
+    /* EDUCATION */
+    .edu-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .edu-card { background: var(--card); padding: 1.75rem 2rem; display: flex; flex-direction: column; gap: 4px; }
+    .edu-period { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); }
+    .edu-degree { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); }
+    .edu-school { font-size: 13px; color: var(--text2); }
+    .edu-gpa { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; }
+ 
+    /* CERTIFICATIONS */
+    .cert-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .cert-name { font-size: 14px; color: var(--text); font-weight: 500; }
+    .cert-issuer { font-size: 12px; color: var(--text3); margin-top: 3px; }
+ 
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .contact-item {
+      background: var(--card); padding: 1.5rem 1.75rem;
+      display: flex; flex-direction: column; gap: 4px;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .contact-item:hover { background: var(--bg2); }
+    .contact-platform { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); }
+    .contact-value { font-size: 14px; color: var(--text); }
+ 
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 5%; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; }
+ 
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+      .nav-mobile-menu { display: flex; }
+      .nav-mobile-menu.open + .nav-links { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0.5rem; }
+      .hero { padding: 0 1.25rem 4rem; }
+      .hero-scroll { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .section { padding: 3rem 1.25rem; }
+      .project-card { grid-template-columns: 1fr; }
+      .project-actions { flex-direction: row; align-items: flex-start; }
+    }
+ 
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.5s ease forwards; }
+    .fade-up-1 { animation-delay: 0.1s; opacity: 0; }
+    .fade-up-2 { animation-delay: 0.2s; opacity: 0; }
+    .fade-up-3 { animation-delay: 0.3s; opacity: 0; }
+    .fade-up-4 { animation-delay: 0.4s; opacity: 0; }
+ 
+    /* MOBILE NAV OPEN */
+    .mobile-nav-open {
+      position: fixed; top: 56px; left: 0; right: 0; z-index: 99;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 2px;
+    }
+    .mobile-nav-open a {
+      font-size: 14px; color: var(--text2); text-decoration: none;
+      padding: 10px 12px; border-radius: 6px; transition: all 0.2s;
+    }
+    .mobile-nav-open a:hover { color: var(--text); background: var(--bg2); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+ 
+    const RESUME_LINK = "https://drive.google.com/file/d/1CNa0p4okjSn9S7PAVL-WtsIEhAItQDMW/view?usp=sharing"; // Replace with your Google Drive link
+ 
+    const skills = [
+      { group: "Languages", items: ["Java", "Python", "JavaScript", "SQL"] },
+      { group: "Frontend", items: ["React.js", "HTML5", "CSS3", "Tailwind CSS"] },
+      { group: "Backend", items: ["Node.js", "Express.js", "RESTful APIs", "Socket.io"] },
+      { group: "Databases", items: ["PostgreSQL", "MongoDB", "MySQL", "Redis"] },
+      { group: "AI / ML", items: ["LangChain", "LlamaIndex", "RAG Pipelines", "OpenAI API", "Gemini API", "pgvector", "Pinecone", "ChromaDB"] },
+      { group: "Tools", items: ["Docker", "AWS", "Git", "Linux", "Postman"] },
+      { group: "CS Core", items: ["DSA", "OOPs", "Computer Networks", "Operating Systems"] },
+    ];
+ 
+    const projects = [
+      {
+        num: "01",
+        name: "ProSync",
+        tagline: "AI-enabled team task management",
+        desc: "A collaborative task management platform built with the MERN stack, featuring real-time updates, secure authentication, and AI-assisted workflows.",
+        highlights: [
+          "Replaced sequential queries with MongoDB aggregation pipelines — cut DB round-trips by 75%",
+          "Redis caching (Upstash) reduced analytics API response from 320ms to 85ms",
+          "Workspace-scoped Socket.io rooms dropped unnecessary WebSocket emissions by ~80%",
+        ],
+        link: "https://github.com/Prudhvi446/ProSync",
+      },
+      {
+        num: "02",
+        name: "DocuMind",
+        tagline: "AI-powered contextual Q&A over documents",
+        desc: "A full-stack RAG application enabling context-aware Q&A over user-uploaded documents using semantic vector search and background job processing.",
+        highlights: [
+          "Semantic vector search with pgvector + HNSW indexing for fast document retrieval",
+          "SHA-256 keyed Redis deduplication cache cut repeated RAG query latency by 67%",
+          "BullMQ background workers dropped perceived upload time from 20s to 1.2s (90% reduction)",
+        ],
+        link: "https://github.com/Prudhvi446/DocuMind",
+      },
+    ];
+ 
+    const education = [
+      { period: "Sept 2023 – May 2027", degree: "B.Tech — Computer Science Engineering", school: "Mohan Babu University, Tirupati, India", score: "GPA: 8.9 / 10" },
+      { period: "Jul 2021 – May 2023", degree: "Class 12", school: "Sasi Junior College", score: "96.9%" },
+    ];
+ 
+    const navLinks = ["About", "Skills", "Projects", "Education", "Contact"];
+ 
+    function App() {
+      const [theme, setTheme] = useState("light");
+      const [mobileOpen, setMobileOpen] = useState(false);
+ 
+      useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+      }, [theme]);
+ 
+      const toggleTheme = () => setTheme(t => t === "light" ? "dark" : "light");
+ 
+      return (
+        <>
+          {/* NAV */}
+          <nav>
+            <a href="#" className="nav-logo"></a>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+              <div className="nav-links">
+                {navLinks.map(l => (
+                  <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMobileOpen(false)}>{l}</a>
+                ))}
+              </div>
+              <button className="theme-btn" onClick={toggleTheme} aria-label="Toggle theme">
+                {theme === "light" ? "◑ dark" : "◑ light"}
+              </button>
+              <button className="nav-mobile-menu" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
+                {mobileOpen ? "✕" : "☰"}
+              </button>
+            </div>
+          </nav>
+ 
+          {mobileOpen && (
+            <div className="mobile-nav-open">
+              {navLinks.map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMobileOpen(false)}>{l}</a>
+              ))}
+            </div>
+          )}
+ 
+          {/* HERO */}
+          <section style={{ position: "relative" }}>
+            <div className="hero">
+              <p className="hero-label fade-up fade-up-1">Software Engineer — Full Stack + AI</p>
+              <h1 className="hero-name fade-up fade-up-2">
+                Prudhvi<br /><em>Kuchipudi</em>
+              </h1>
+              <p className="hero-sub fade-up fade-up-3">
+                Computer Science undergraduate specialising in backend systems, distributed architecture, and AI-powered applications. 300+ LeetCode problems solved.
+              </p>
+              <div className="hero-actions fade-up fade-up-4">
+                <a href="#projects" className="btn-primary">View Projects →</a>
+                <a href="#contact" className="btn-outline">Get in Touch</a>
+                <a href={RESUME_LINK} target="_blank" rel="noopener noreferrer" className="btn-outline">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Resume
+                </a>
+              </div>
+            </div>
+            <div className="hero-scroll">scroll</div>
+          </section>
+ 
+          {/* ABOUT */}
+          <section id="about" className="section">
+            <div className="section-header">
+              <div>
+                <p className="section-label">01 — About</p>
+                <h2 className="section-title">Building reliable,<br />scalable systems</h2>
+              </div>
+            </div>
+            <div className="about-grid">
+              <div className="about-text">
+                <p>
+                  I'm a third-year CS undergrad at Mohan Babu University, Tirupati. My focus is on backend engineering — optimized queries, caching strategies, real-time systems, and scalable API design.
+                </p>
+                <p>
+                  Beyond the server, I build AI-powered applications using RAG pipelines, vector databases, and LLM APIs. I care deeply about performance: every millisecond and every unnecessary round-trip bothers me.
+                </p>
+                <p>
+                  I've solved 300+ problems on LeetCode and hold an AWS Cloud Foundations certification. Currently open to internship and entry-level opportunities.
+                </p>
+              </div>
+              <div>
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <span className="stat-num">300+</span>
+                    <span className="stat-label">LeetCode problems</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-num">8.9</span>
+                    <span className="stat-label">GPA (out of 10)</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-num">2</span>
+                    <span className="stat-label">Full-stack AI projects</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-num">96.9%</span>
+                    <span className="stat-label">Class 12 score</span>
+                  </div>
+                </div>
+ 
+                {/* RESUME BANNER inside about */}
+                <div className="resume-banner" style={{ marginTop: "1rem" }}>
+                  <div className="resume-banner-text">
+                    <strong>View full resume</strong>
+                    <p>Open the detailed PDF version on Google Drive.</p>
+                  </div>
+                  <a href={RESUME_LINK} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ flexShrink: 0 }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Open Resume
+                  </a>
+                </div>
+
+                {/* VIEW MY PROFILES */}
+                <div style={{ marginTop: "1.5rem" }}>
+                  <p style={{ fontSize: "14px", fontWeight: "600", marginBottom: "0.75rem", color: "var(--text)" }}>View my profiles</p>
+                  <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                    <a href="https://www.linkedin.com/in/prudhvi-kuchipudi-3592392ba/" target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ flex: "1 1 auto", justifyContent: "center" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                      LinkedIn
+                    </a>
+                    <a href="https://github.com/Prudhvi446" target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ flex: "1 1 auto", justifyContent: "center" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                      GitHub
+                    </a>
+                    <a href="https://leetcode.com/u/PrudhviKuchipudi/" target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ flex: "1 1 auto", justifyContent: "center" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                      LeetCode
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+ 
+          {/* SKILLS */}
+          <section id="skills" className="section">
+            <div className="section-header">
+              <div>
+                <p className="section-label">02 — Skills</p>
+                <h2 className="section-title">Technologies &amp;<br />tools I work with</h2>
+              </div>
+            </div>
+            <div className="skills-grid">
+              {skills.map(sg => (
+                <div className="skill-group" key={sg.group}>
+                  <p className="skill-group-title">{sg.group}</p>
+                  <div className="skill-tags">
+                    {sg.items.map(i => <span key={i} className="tag">{i}</span>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+ 
+          {/* PROJECTS */}
+          <section id="projects" className="section">
+            <div className="section-header">
+              <div>
+                <p className="section-label">03 — Projects</p>
+                <h2 className="section-title">Things I've built</h2>
+              </div>
+            </div>
+            <div className="projects-list">
+              {projects.map(p => (
+                <div className="project-card" key={p.num}>
+                  <div>
+                    <p className="project-num">{p.num}</p>
+                    <h3 className="project-name">{p.name}</h3>
+                    <p style={{ fontSize: "11px", fontFamily: "'DM Mono', monospace", color: "var(--text3)", marginBottom: "0.75rem", letterSpacing: "0.06em" }}>{p.tagline.toUpperCase()}</p>
+                    <p className="project-desc">{p.desc}</p>
+                    <ul className="project-highlights">
+                      {p.highlights.map((h, i) => <li key={i}>{h}</li>)}
+                    </ul>
+                    <div className="skill-tags">
+                      {p.num === "01"
+                        ? ["MERN", "Socket.io", "MongoDB", "Redis", "OAuth 2.0", "JWT"].map(t => <span key={t} className="tag">{t}</span>)
+                        : ["RAG", "pgvector", "Redis", "BullMQ", "Node.js", "LLM APIs"].map(t => <span key={t} className="tag">{t}</span>)
+                      }
+                    </div>
+                  </div>
+                  <div className="project-actions">
+                    <a href={p.link} target="_blank" rel="noopener noreferrer" className="link-btn">
+                      Source ↗
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+ 
+          {/* EDUCATION */}
+          <section id="education" className="section">
+            <div className="section-header">
+              <div>
+                <p className="section-label">04 — Education</p>
+                <h2 className="section-title">Academic<br />background</h2>
+              </div>
+            </div>
+            <div className="edu-list">
+              {education.map((e, i) => (
+                <div className="edu-card" key={i}>
+                  <span className="edu-period">{e.period}</span>
+                  <span className="edu-degree">{e.degree}</span>
+                  <span className="edu-school">{e.school}</span>
+                  <span className="edu-gpa">{e.score}</span>
+                </div>
+              ))}
+            </div>
+ 
+            {/* CERTIFICATIONS nested under education */}
+            <div style={{ marginTop: "2rem" }}>
+              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text3)", marginBottom: "1rem" }}>Certifications</p>
+              <div style={{ display: "grid", gap: "0.75rem" }}>
+                <div className="cert-card">
+                  <div>
+                    <p className="cert-name">AWS Cloud Foundations</p>
+                    <p className="cert-issuer">Amazon Web Services — Cloud architecture, security &amp; pricing</p>
+                  </div>
+                  <a href="https://www.credly.com/badges/4f9d9fe3-fac6-41dd-91e7-a96d3d515512/public_url" target="_blank" rel="noopener noreferrer" className="link-btn" style={{ flexShrink: 0 }}>View ↗</a>
+                </div>
+
+                <div className="cert-card">
+                  <div>
+                    <p className="cert-name">ServiceNow Certified System Administrator (CSA)</p>
+                    <p className="cert-issuer">ServiceNow — Platform administration &amp; workflows</p>
+                  </div>
+                  <a href="https://www.credly.com/badges/9e01e39c-29da-42ec-899a-42dc2ed6dc83/public_url" target="_blank" rel="noopener noreferrer" className="link-btn" style={{ flexShrink: 0 }}>View ↗</a>
+                </div>
+              </div>
+            </div>
+          </section>
+ 
+          {/* CONTACT */}
+          <section id="contact" className="section">
+            <div className="section-header">
+              <div>
+                <p className="section-label">05 — Contact</p>
+                <h2 className="section-title">Let's talk</h2>
+              </div>
+            </div>
+            <div className="contact-grid">
+              <a href="mailto:prudhvikuchipudii@gmail.com" className="contact-item">
+                <span className="contact-platform">Email</span>
+                <span className="contact-value">prudhvikuchipudii@gmail.com</span>
+              </a>
+              <a href="tel:+917569117369" className="contact-item">
+                <span className="contact-platform">Mobile Number</span>
+                <span className="contact-value">+91 7569117369</span>
+              </a>
+            </div>
+          </section>
+ 
+          <footer>
+            <p>Prudhvi Kuchipudi</p>
+            
+          </footer>
+        </>
+      );
+    }
+ 
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
